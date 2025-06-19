@@ -15,7 +15,9 @@ const protectedRoutes = require('./src/server/routes/protectedRoutes');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://mundoanimalweb-frontend.onrender.com'
+}));
 app.use(express.json());
 
 app.use('/assets/imagenes', express.static(path.join(__dirname, 'public/assets/imagenes')));
