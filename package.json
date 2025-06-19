@@ -1,0 +1,31 @@
+{
+  "name": "mundoanimalweb",
+  "version": "1.0.0",
+  "description": "mundoanimal web",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"npm run dev --prefix Backend\" \"npm start --prefix mundoanimal\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tienda",
+    "online",
+    "ecommerce",
+    "html",
+    "css"
+  ],
+  "author": "ValentinA",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.10"
+  }
+}
