@@ -1,14 +1,14 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Nuevos = () => {
   const [productos, setProductos] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL || '';
 
   useEffect(() => {
     const fetchProductosNuevos = async () => {
       try {
-        const res = await fetch('/api/productos?nuevos=true');
+        const res = await fetch(`${API_URL}/api/productos?nuevos=true`);
         if (!res.ok) throw new Error('Error al cargar productos nuevos');
         const data = await res.json();
         setProductos(data);
@@ -17,7 +17,7 @@ const Nuevos = () => {
       }
     };
     fetchProductosNuevos();
-  }, []);
+  }, [API_URL]);
 
   return (
     <section className="seccion">

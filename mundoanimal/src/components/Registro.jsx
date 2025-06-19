@@ -1,11 +1,10 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL || ''; 
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 const Registro = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +13,7 @@ const Registro = () => {
     contraseña: ''
   });
 
-  const [mensaje, setMensaje] = useState(''); 
+  const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState(false);
 
   const handleChange = (e) => {
@@ -28,11 +27,10 @@ const Registro = () => {
 
     try {
       const res = await fetch(`${API_URL}/api/usuarios/registro`, {
-
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(formData)
-});
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
 
       if (res.ok) {
         setMensaje('Registro exitoso. Ya puedes iniciar sesión.');
@@ -81,11 +79,13 @@ const Registro = () => {
           />
           <button type="submit">Registrarse</button>
         </form>
+
         {mensaje && (
           <p style={{ color: error ? 'red' : 'green', marginTop: '1rem' }}>
             {mensaje}
           </p>
         )}
+
         <p>
           ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
         </p>

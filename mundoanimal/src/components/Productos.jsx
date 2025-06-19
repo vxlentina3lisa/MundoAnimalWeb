@@ -6,7 +6,8 @@ const Productos = () => {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/productos')
+    fetch('https://tu-backend.onrender.com/api/productos')
+
       .then(res => res.json())
       .then(data => setProductos(data))
       .catch(err => console.error('Error al cargar productos:', err));
