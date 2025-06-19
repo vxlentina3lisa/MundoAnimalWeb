@@ -3,6 +3,10 @@ const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const usuarioRoutes = require('./src/server/routes/usuarioRoutes');
 const productoRoutes = require('./src/server/routes/productoRoutes');
 const carritoRoutes = require('./src/server/routes/carritoRoutes');
