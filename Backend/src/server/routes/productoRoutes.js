@@ -1,10 +1,15 @@
-
 const express = require('express');
 const router = express.Router();
+const { pool } = require('../../db');
 
-const { obtenerProductos, obtenerProductoPorId } = require('../controllers/productoController');
-
-router.get('/', obtenerProductos);
-router.get('/:id', obtenerProductoPorId);
+router.get('/', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM productos');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error al obtener productos' });
+  }
+});
 
 module.exports = router;
