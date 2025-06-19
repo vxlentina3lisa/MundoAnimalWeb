@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
+const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    fetch('https://tu-backend.onrender.com/api/productos')
-
-      .then(res => res.json())
-      .then(data => setProductos(data))
-      .catch(err => console.error('Error al cargar productos:', err));
-  }, []);
+useEffect(() => {
+  fetch(`${API_URL}/api/productos`)
+    .then(res => res.json())
+    .then(data => setProductos(data))
+    .catch(err => console.error('Error al cargar productos:', err));
+}, [API_URL]);
 
   return (
     <section className="seccion">
