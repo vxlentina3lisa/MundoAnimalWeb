@@ -5,7 +5,7 @@ import Header from './Header';
 import Footer from './Footer';
 import { useCarrito } from '../context/CarritoContext';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Unidad = () => {
   const { id } = useParams();

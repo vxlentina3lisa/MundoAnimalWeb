@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 
 const Productos = () => {
+  console.log('API_URL:', import.meta.env.VITE_API_URL); // <--- aquí
   const [productos, setProductos] = useState([]);
 
   const API_URL = import.meta.env.VITE_API_URL;
@@ -13,6 +14,9 @@ const Productos = () => {
       .then(data => setProductos(data))
       .catch(err => console.error('Error al cargar productos:', err));
   }, []);
+
+  // resto del componente...
+
 
   return (
     <section className="seccion">
