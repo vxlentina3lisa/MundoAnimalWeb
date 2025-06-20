@@ -49,7 +49,7 @@ const Unidad = () => {
       <Header />
       <div className="contenedor-principal">
         <div className="tarjeta-producto">
-          <img src={producto.imagen} alt={producto.nombre} className="imagen-producto" />
+          <img src={producto.imagen_url} alt={producto.nombre} className="imagen-producto" />
           <div className="info-producto">
             <h2>{producto.nombre}</h2>
             <p>{producto.descripcion}</p>

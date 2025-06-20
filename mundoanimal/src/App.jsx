@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/Header';
 import Carrusel from './components/Carrusel';
 import Nuevos from './components/Nuevos';
-import Catalogo from './components/Productos';
+import Productos from './components/Productos';
 import Footer from './components/Footer';
 import './App.css';
 
@@ -12,7 +12,7 @@ function App() {
       <Header />
       <Carrusel />
       <Nuevos />
-      <Catalogo />
+      <Productos />
       <Footer />
     </div>
   );

@@ -1,17 +1,17 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
-const API_URL = import.meta.env.VITE_API_URL;
 
-useEffect(() => {
-  fetch(`${API_URL}/api/productos`)
-    .then(res => res.json())
-    .then(data => setProductos(data))
-    .catch(err => console.error('Error al cargar productos:', err));
-}, [API_URL]);
+  useEffect(() => {
+    fetch(`${API_URL}/api/productos`)
+      .then(res => res.json())
+      .then(data => setProductos(data))
+      .catch(err => console.error('Error al cargar productos:', err));
+  }, []);
 
   return (
     <section className="seccion">
@@ -22,7 +22,7 @@ useEffect(() => {
         ) : (
           productos.map((producto) => (
             <Link
-              to={`/producto/${producto.id}`}
+              to={`/producto/${producto.id}`} // detalle usa ruta singular /producto/:id
               key={producto.id}
               className="card-producto-link"
             >

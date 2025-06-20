@@ -7,6 +7,8 @@ import Registro from './components/Registro.jsx';
 import InicioSesion from './components/Iniciodesesion.jsx';
 import Unidad from './components/Unidad.jsx';
 import Carrito from './components/Carrito.jsx';
+import Productos from './components/Productos.jsx';
+import Nuevos from './components/Nuevos.jsx';
 
 import { AuthProvider } from './context/AuthContext.jsx';
 import { CarritoProvider } from './context/CarritoContext.jsx';
@@ -22,9 +24,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/" element={<App />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/login" element={<InicioSesion />} />
+            <Route path="/nuevos" element={<Nuevos />} />
+            <Route path="/productos" element={<Productos />} />
             <Route path="/producto/:id" element={<Unidad />} />
             <Route path="/carrito" element={<Carrito />} />
           </Routes>
+
         </BrowserRouter>
       </CarritoProvider>
     </AuthProvider>
