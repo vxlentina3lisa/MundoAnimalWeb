@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 
 const Productos = () => {
-  console.log('API_URL:', import.meta.env.VITE_API_URL); // <--- aquí
+  console.log('API_URL:', import.meta.env.VITE_API_URL);
   const [productos, setProductos] = useState([]);
 
   const API_URL = import.meta.env.VITE_API_URL;
@@ -14,9 +14,6 @@ const Productos = () => {
       .then(data => setProductos(data))
       .catch(err => console.error('Error al cargar productos:', err));
   }, []);
-
-  // resto del componente...
-
 
   return (
     <section className="seccion">
@@ -33,10 +30,10 @@ const Productos = () => {
             >
               <div className="card-producto">
                 <img
-                  src={producto.imagen}
+                  src={`${API_URL}${producto.imagen_url}`}
                   alt={producto.nombre}
-                  style={{ width: '200px' }}
                 />
+
                 <h3 className="producto-nombre">{producto.nombre}</h3>
                 <p className="producto-precio">${producto.precio}</p>
               </div>
