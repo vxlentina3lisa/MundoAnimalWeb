@@ -13,7 +13,7 @@ const obtenerProductos = async (req, res) => {
 
     const productosConRutaImagen = resultado.rows.map(producto => ({
       ...producto,
-      imagen: `/assets/imagenes/${producto.imagen_url}` 
+      imagen: `/assets/imagenes/${producto.imagen}` 
     }));
 
     res.json(productosConRutaImagen);

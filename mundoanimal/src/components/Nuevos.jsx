@@ -29,14 +29,14 @@ const Nuevos = () => {
         ) : (
           productos.map((producto) => (
             <Link
-              to={`/producto/${producto.id}`} // detalle usa ruta singular /producto/:id
+              to={`/producto/${producto.id}`} 
               key={producto.id}
               className="card-producto-link"
             >
               <div className="card-producto">
                 <span className="etiqueta-nuevo">Nuevo</span>
                 <img
-                  src={producto.imagen_url}
+                  src={producto.imagen}
                   alt={producto.nombre}
                   style={{ width: '200px' }}
                 />

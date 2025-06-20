@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetch(`${API_URL}/api/productos`)
@@ -22,7 +23,7 @@ const Productos = () => {
         ) : (
           productos.map((producto) => (
             <Link
-              to={`/producto/${producto.id}`} // detalle usa ruta singular /producto/:id
+              to={`/producto/${producto.id}`}
               key={producto.id}
               className="card-producto-link"
             >
