@@ -22,7 +22,7 @@ const Nuevos = () => {
 
   return (
     <section className="seccion">
-      <h2>Nuevos Productos</h2>
+      <h2>Nuevos Productos</h2> 
       <div className="productos-grid">
         {productos.length === 0 ? (
           <p>No hay productos nuevos disponibles.</p>
@@ -36,7 +36,7 @@ const Nuevos = () => {
               <div className="card-producto">
                 <span className="etiqueta-nuevo">Nuevo</span>
                 <img
-                  src={`${API_URL}${producto.imagen}`}
+                  src={`${API_URL}${producto.imagen_url}`}
                   alt={producto.nombre}
                   style={{ width: '200px' }}
                 />
