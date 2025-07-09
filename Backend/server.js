@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-
 require('dotenv').config();
 
 const usuarioRoutes = require('./src/server/routes/usuarioRoutes');
@@ -18,7 +17,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/assets/imagenes', express.static(path.join(__dirname, 'public/assets/imagenes')));
+app.use('/imagenes', express.static(path.join(__dirname, 'public/assets/imagenes')));
 
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/productos', productoRoutes);
