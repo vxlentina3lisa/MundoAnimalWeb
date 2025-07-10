@@ -2,9 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
-import { useAuth } from '../context/AuthContext';
 import '../App.css';
-const { usuario } = useAuth();
 
 const Header = () => {
   const [mostrarInfo, setMostrarInfo] = useState(false);
@@ -21,8 +19,6 @@ const Header = () => {
   return (
     <header>
       <div className="top-bar">
-        {usuario && <span className="link-white">Hola, {usuario.nombre}</span>}
-
         <button onClick={toggleInfo} className="link-white btn-link" aria-expanded={mostrarInfo} aria-controls="cliente-info">
           Atención al cliente
         </button>
