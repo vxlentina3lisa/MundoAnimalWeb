@@ -12,22 +12,34 @@ import PropTypes from 'prop-types'; // Importar PropTypes
  * @param {function} props.onClose - Función a llamar cuando el mensaje se cierra.
  */
 const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) => {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(false); // Inicia como falso, solo se muestra si hay mensaje
+
+    // Log para depuración: Verifica si el componente se está renderizando y qué props recibe
+    console.log('MessageDisplay rendering:', { message, type, isVisible });
 
     useEffect(() => {
         if (message) {
             setIsVisible(true);
+            console.log('MessageDisplay: Estableciendo temporizador para el mensaje:', message);
             const timer = setTimeout(() => {
                 setIsVisible(false);
+                console.log('MessageDisplay: Ocultando mensaje:', message);
                 if (onClose) {
                     onClose();
                 }
             }, duration);
 
-            return () => clearTimeout(timer);
+            return () => {
+                clearTimeout(timer);
+                console.log('MessageDisplay: Limpiando temporizador.');
+            };
+        } else {
+            setIsVisible(false); // Ocultar si el mensaje está vacío
+            console.log('MessageDisplay: El mensaje está vacío, ocultando.');
         }
     }, [message, duration, onClose]);
 
+    // Solo renderiza si el mensaje está presente Y es visible
     if (!isVisible || !message) {
         return null;
     }
@@ -42,18 +54,23 @@ const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) =>
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
         transition: 'opacity 0.3s ease-in-out',
         opacity: isVisible ? 1 : 0,
-        color: '#fff' // Default text color
+        color: '#fff', // Color de texto por defecto
+        position: 'fixed', // Asegura que esté en la parte superior y visible
+        top: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 1000 // Asegura que esté por encima de otro contenido
     };
 
     const typeStyles = {
         success: {
-            backgroundColor: '#4CAF50', // Green
+            backgroundColor: '#4CAF50', // Verde
         },
         error: {
-            backgroundColor: '#f44336', // Red
+            backgroundColor: '#f44336', // Rojo
         },
         info: {
-            backgroundColor: '#2196F3', // Blue
+            backgroundColor: '#2196F3', // Azul
         },
     };
 
