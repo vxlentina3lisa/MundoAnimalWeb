@@ -1,103 +1,92 @@
-// src/components/Header.jsx
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
-import '../App.css';
-import { useAuth } from '../context/AuthContext'; // Importar el contexto de autenticación
-import MessageDisplay from './MessageDisplay'; // Importar el componente de mensajes
+// src/components/MessageDisplay.jsx
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types'; // Importar PropTypes
 
-const Header = () => {
-    const [mostrarInfo, setMostrarInfo] = useState(false);
-    const [busqueda, setBusqueda] = useState("");
-    const [message, setMessage] = useState('');
-    const [messageType, setMessageType] = useState('info');
+/**
+ * Componente para mostrar mensajes de notificación (éxito/error) en la UI.
+ * Reemplaza el uso de `alert()`.
+ * @param {object} props - Propiedades del componente.
+ * @param {string} props.message - El mensaje a mostrar.
+ * @param {string} [props.type='info'] - Tipo de mensaje ('success', 'error', 'info').
+ * @param {number} [props.duration=3000] - Duración en milisegundos antes de que el mensaje desaparezca.
+ * @param {function} props.onClose - Función a llamar cuando el mensaje se cierra.
+ */
+const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) => {
+    const [isVisible, setIsVisible] = useState(false); // Inicia como falso, solo se muestra si hay mensaje
 
-    const { usuario, cerrarSesion } = useAuth(); // Obtener usuario y función de cerrar sesión del contexto
-    const navigate = useNavigate();
+    // Log para depuración: Verifica si el componente se está renderizando y qué props recibe
+    console.log('MessageDisplay rendering:', { message, type, isVisible });
 
-    const toggleInfo = () => setMostrarInfo(!mostrarInfo);
-    const handleBusquedaChange = (e) => setBusqueda(e.target.value);
+    useEffect(() => {
+        if (message) {
+            setIsVisible(true);
+            console.log('MessageDisplay: Estableciendo temporizador para el mensaje:', message);
+            const timer = setTimeout(() => {
+                setIsVisible(false);
+                console.log('MessageDisplay: Ocultando mensaje:', message);
+                if (onClose) {
+                    onClose();
+                }
+            }, duration);
 
-    const handleBuscar = () => {
-        // En una aplicación real, esto redirigiría a una página de resultados de búsqueda
-        // o filtraría productos. Por ahora, solo muestra un mensaje.
-        setMessage(`Buscando: ${busqueda}`);
-        setMessageType('info');
-        console.log(`Buscando: ${busqueda}`);
+            return () => {
+                clearTimeout(timer);
+                console.log('MessageDisplay: Limpiando temporizador.');
+            };
+        } else {
+            setIsVisible(false); // Ocultar si el mensaje está vacío
+            console.log('MessageDisplay: El mensaje está vacío, ocultando.');
+        }
+    }, [message, duration, onClose]);
+
+    // Solo renderiza si el mensaje está presente Y es visible
+    if (!isVisible || !message) {
+        return null;
+    }
+
+    const baseStyle = {
+        padding: '10px 20px',
+        borderRadius: '8px',
+        margin: '10px auto',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        maxWidth: '400px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+        transition: 'opacity 0.3s ease-in-out',
+        opacity: isVisible ? 1 : 0,
+        color: '#fff', // Color de texto por defecto
+        position: 'fixed', // Asegura que esté en la parte superior y visible
+        top: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 1000 // Asegura que esté por encima de otro contenido
     };
 
-    const handleLogout = () => {
-        cerrarSesion(); // Llama a la función de cerrar sesión del contexto
-        setMessage('Sesión cerrada correctamente.');
-        setMessageType('success');
-        navigate('/'); // Redirige a la página principal o de login
+    const typeStyles = {
+        success: {
+            backgroundColor: '#4CAF50', // Verde
+        },
+        error: {
+            backgroundColor: '#f44336', // Rojo
+        },
+        info: {
+            backgroundColor: '#2196F3', // Azul
+        },
     };
 
     return (
-        <header>
-            {message && (
-                <MessageDisplay
-                    message={message}
-                    type={messageType}
-                    onClose={() => setMessage('')} // Limpiar el mensaje cuando se cierra
-                />
-            )}
-            <div className="top-bar">
-                <button onClick={toggleInfo} className="link-white btn-link" aria-expanded={mostrarInfo} aria-controls="cliente-info">
-                    Atención al cliente
-                </button>
-                {usuario ? (
-                    // Si hay un usuario logueado, mostrar "Hola, [nombre]" y botón de cerrar sesión
-                    <>
-                        <span className="link-white">Hola, {usuario.nombre}</span>
-                        <button onClick={handleLogout} className="link-white btn-link">Cerrar sesión</button>
-                    </>
-                ) : (
-                    // Si no hay usuario, mostrar "Iniciar sesión"
-                    <Link to="/login" className="link-white">Iniciar sesión</Link>
-                )}
-            </div>
-            {mostrarInfo && (
-                <div id="cliente-info" className="cliente-info" role="region" aria-live="polite">
-                    <p><strong>En MundoAnimal nos importa tu experiencia.</strong> Estamos aquí para ayudarte en todo lo que necesites, porque tu satisfacción es nuestra prioridad.</p>
-                    <p>¿Tienes dudas sobre nuestros productos, métodos de pago o tiempos de envío? Nuestro equipo de atención al cliente está disponible para responder tus preguntas y ofrecerte soluciones rápidas y efectivas.</p>
-                    <p><strong>¿Cómo contactarnos?</strong></p>
-                    <ul>
-                        <li>Escríbenos al correo: soporte@mundoanimal.com</li>
-                        <li>Llámanos al: +56976739599 </li>
-                    </ul>
-                    <p>Además, si tienes alguna sugerencia o comentario, ¡nos encantaría escucharte! Queremos mejorar día a día para brindarte la mejor experiencia de compra.</p>
-                    <p>Gracias por confiar en nosotros. ¡Estamos para ayudarte!</p>
-                </div>
-            )}
-            <div className="middle-bar">
-                <Link to="/">
-                    <img src={logo} alt="MundoAnimal" className="logo" />
-                </Link>
-                <div className="search-bar">
-                    <input
-                        type="text"
-                        placeholder="Buscar productos..."
-                        value={busqueda}
-                        onChange={handleBusquedaChange}
-                        aria-label="Buscar productos"
-                    />
-                    <button className="btn-buscar" onClick={handleBuscar} aria-label="Buscar">
-                        🔍
-                    </button>
-                </div>
-                <div className="iconos">
-                    <Link to="/carrito" className="link-black" aria-label="Ir al carrito de compras"> 🛒  Carrito</Link>
-                </div>
-            </div>
-            <nav className="main-nav" aria-label="Navegación principal">
-                <Link to="/productos">PRODUCTOS</Link> {/* Enlace general a todos los productos */}
-                <Link to="/nuevos">NUEVOS</Link> {/* Enlace a productos nuevos */}
-                {/* Puedes añadir más categorías aquí */}
-                <Link to="/contacto">CONTACTO</Link>
-            </nav>
-        </header>
+        <div style={{ ...baseStyle, ...typeStyles[type] }}>
+            {message}
+        </div>
     );
 };
 
-export default Header;
+// Añadir la validación de PropTypes
+MessageDisplay.propTypes = {
+    message: PropTypes.string.isRequired, // 'message' es una cadena y es requerida
+    type: PropTypes.oneOf(['success', 'error', 'info']), // 'type' debe ser uno de estos valores
+    duration: PropTypes.number, // 'duration' es un número
+    onClose: PropTypes.func, // 'onClose' es una función
+};
+
+export default MessageDisplay;
