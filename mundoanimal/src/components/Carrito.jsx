@@ -21,7 +21,8 @@ const Carrito = () => {
         return <Navigate to="/login" replace />;
     }
 
-    const total = carrito.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+    // Asegurarse de que precio sea un número antes de la suma
+    const total = carrito.reduce((sum, item) => sum + (parseFloat(item.precio) || 0) * item.cantidad, 0);
 
     const handleActualizarCantidad = async (productoId, nuevaCantidad) => {
         await actualizarCantidadProducto(productoId, nuevaCantidad);
@@ -69,7 +70,8 @@ const Carrito = () => {
                                     />
                                     <div className="carrito-item-info">
                                         <h3>{producto.nombre}</h3>
-                                        <p>${producto.precio.toFixed(2)}</p>
+                                        {/* Asegurarse de que producto.precio sea un número antes de toFixed */}
+                                        <p>${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
                                         <div className="carrito-item-cantidad">
                                             <label htmlFor={`cantidad-${producto.producto_id}`}>Cantidad:</label>
                                             <input

@@ -74,7 +74,8 @@ const Unidad = () => {
                     <div className="info-producto">
                         <h2>{producto.nombre}</h2>
                         <p>{producto.descripcion}</p>
-                        <p className="precio">${producto.precio}</p>
+                        {/* Asegurarse de que producto.precio sea un número antes de mostrarlo */}
+                        <p className="precio">${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
                         <div className="seccion-cantidad">
                             <label htmlFor="cantidad">Cantidad:</label>
                             <input
