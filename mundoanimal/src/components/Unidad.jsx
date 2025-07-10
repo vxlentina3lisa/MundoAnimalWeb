@@ -29,6 +29,7 @@ const Unidad = () => {
                     throw new Error('Producto no encontrado.');
                 }
                 const data = await res.json();
+                console.log('Datos del producto recibidos del backend:', data); // LOG para depurar el objeto producto
                 setProducto(data);
             } catch (err) {
                 setError(err.message);
@@ -43,7 +44,6 @@ const Unidad = () => {
 
     const handleAgregar = async () => {
         if (producto) {
-            // Llama a la función agregarAlCarrito del contexto, que se encargará de la lógica del backend
             await agregarAlCarrito(producto, cantidad);
             setMessage('Producto agregado al carrito.');
             setMessageType('success');
@@ -53,6 +53,20 @@ const Unidad = () => {
     if (loading) return <p className="loading-message">Cargando producto...</p>;
     if (error) return <p className="error-message">{error}</p>;
     if (!producto) return <p className="not-found-message">Producto no disponible.</p>;
+
+    // --- Lógica para limpiar la URL de la imagen ---
+    let cleanedImageUrl = producto.imagen_url;
+    if (cleanedImageUrl) {
+        // Eliminar cualquier prefijo como '/assets/imagenes/' o '/imagenes/'
+        cleanedImageUrl = cleanedImageUrl.replace(/^\/?(assets\/)?imagenes\//, '');
+        // Asegurarse de que no haya barras iniciales o finales innecesarias
+        cleanedImageUrl = cleanedImageUrl.split('/').pop(); // Obtener solo el nombre del archivo
+    } else {
+        cleanedImageUrl = 'placeholder.jpg'; // Imagen de fallback si no hay URL
+    }
+
+    const fullImageUrl = `${API_URL}/assets/imagenes/${cleanedImageUrl}`;
+    console.log('URL de la imagen final construida:', fullImageUrl); // LOG para depurar la URL completa
 
     return (
         <div>
@@ -67,14 +81,14 @@ const Unidad = () => {
             <div className="contenedor-principal">
                 <div className="tarjeta-producto">
                     <img
-                        src={`${API_URL}/assets/imagenes/${producto.imagen_url}`} // Construir la URL completa de la imagen
+                        src={fullImageUrl} // Usar la URL limpia y completa
                         alt={producto.nombre}
                         className="imagen-producto"
+                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} // Fallback si la imagen no carga
                     />
                     <div className="info-producto">
                         <h2>{producto.nombre}</h2>
                         <p>{producto.descripcion}</p>
-                        {/* Asegurarse de que producto.precio sea un número antes de mostrarlo */}
                         <p className="precio">${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
                         <div className="seccion-cantidad">
                             <label htmlFor="cantidad">Cantidad:</label>
