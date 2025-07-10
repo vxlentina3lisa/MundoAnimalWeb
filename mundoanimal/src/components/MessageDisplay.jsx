@@ -1,5 +1,6 @@
 // src/components/MessageDisplay.jsx
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types'; // Importar PropTypes
 
 /**
  * Componente para mostrar mensajes de notificación (éxito/error) en la UI.
@@ -61,6 +62,14 @@ const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) =>
             {message}
         </div>
     );
+};
+
+// Añadir la validación de PropTypes
+MessageDisplay.propTypes = {
+    message: PropTypes.string.isRequired, // 'message' es una cadena y es requerida
+    type: PropTypes.oneOf(['success', 'error', 'info']), // 'type' debe ser uno de estos valores
+    duration: PropTypes.number, // 'duration' es un número
+    onClose: PropTypes.func, // 'onClose' es una función
 };
 
 export default MessageDisplay;

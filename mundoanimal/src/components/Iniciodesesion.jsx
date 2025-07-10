@@ -1,6 +1,6 @@
 // src/components/Iniciodesesion.jsx
 import React, { useState } from 'react';
-import { Link, useNavigate } => 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import { useAuth } from '../context/AuthContext'; // Importar el contexto de autenticación
