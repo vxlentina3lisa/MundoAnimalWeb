@@ -1,76 +1,98 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+// src/components/Unidad.jsx
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import { useCarrito } from '../context/CarritoContext';
+import { useCarrito } from '../context/CarritoContext'; // Importar el contexto del carrito
+import MessageDisplay from './MessageDisplay'; // Importar el componente de mensajes
+import '../App.css'; // Asegúrate de que los estilos estén importados
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL; // Obtener la URL de la API
 
 const Unidad = () => {
-  const { id } = useParams();
-  const [producto, setProducto] = useState(null);
-  const [cantidad, setCantidad] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { agregarAlCarrito } = useCarrito();
+    const { id } = useParams(); // Obtener el ID del producto de la URL
+    const [producto, setProducto] = useState(null);
+    const [cantidad, setCantidad] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('info');
 
-  useEffect(() => {
-    const fetchProducto = async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/productos/${id}`);
-        if (!res.ok) {
-          throw new Error('Producto no encontrado');
+    const { agregarAlCarrito } = useCarrito(); // Obtener la función agregarAlCarrito del contexto
+
+    // Efecto para cargar los detalles del producto
+    useEffect(() => {
+        const fetchProducto = async () => {
+            try {
+                const res = await fetch(`${API_URL}/api/productos/${id}`);
+                if (!res.ok) {
+                    throw new Error('Producto no encontrado.');
+                }
+                const data = await res.json();
+                setProducto(data);
+            } catch (err) {
+                setError(err.message);
+                setMessage(`Error: ${err.message}`);
+                setMessageType('error');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducto();
+    }, [id]); // Dependencia: el ID del producto
+
+    const handleAgregar = async () => {
+        if (producto) {
+            // Llama a la función agregarAlCarrito del contexto, que se encargará de la lógica del backend
+            await agregarAlCarrito(producto, cantidad);
+            setMessage('Producto agregado al carrito.');
+            setMessageType('success');
         }
-        const data = await res.json();
-        setProducto(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
     };
 
-    fetchProducto();
-  }, [id]);
+    if (loading) return <p className="loading-message">Cargando producto...</p>;
+    if (error) return <p className="error-message">{error}</p>;
+    if (!producto) return <p className="not-found-message">Producto no disponible.</p>;
 
-  const handleAgregar = () => {
-    if (producto) {
-      agregarAlCarrito({ ...producto, cantidad });
-      alert('Producto agregado al carrito');
-    }
-  };
-
-  if (loading) return <p>Cargando producto...</p>;
-  if (error) return <p>{error}</p>;
-
-  return (
-    <div>
-      <Header />
-      <div className="contenedor-principal">
-        <div className="tarjeta-producto">
-          <img src={producto.imagen_url} alt={producto.nombre} className="imagen-producto" />
-          <div className="info-producto">
-            <h2>{producto.nombre}</h2>
-            <p>{producto.descripcion}</p>
-            <p className="precio">${producto.precio}</p>
-            <div className="seccion-cantidad">
-              <label htmlFor="cantidad">Cantidad:</label>
-              <input
-                id="cantidad"
-                type="number"
-                min="1"
-                value={cantidad}
-                onChange={(e) => setCantidad(Number(e.target.value))}
-              />
+    return (
+        <div>
+            <Header />
+            {message && (
+                <MessageDisplay
+                    message={message}
+                    type={messageType}
+                    onClose={() => setMessage('')}
+                />
+            )}
+            <div className="contenedor-principal">
+                <div className="tarjeta-producto">
+                    <img
+                        src={`${API_URL}/assets/imagenes/${producto.imagen_url}`} // Construir la URL completa de la imagen
+                        alt={producto.nombre}
+                        className="imagen-producto"
+                    />
+                    <div className="info-producto">
+                        <h2>{producto.nombre}</h2>
+                        <p>{producto.descripcion}</p>
+                        <p className="precio">${producto.precio}</p>
+                        <div className="seccion-cantidad">
+                            <label htmlFor="cantidad">Cantidad:</label>
+                            <input
+                                id="cantidad"
+                                type="number"
+                                min="1"
+                                value={cantidad}
+                                onChange={(e) => setCantidad(Number(e.target.value))}
+                                aria-label="Cantidad del producto"
+                            />
+                        </div>
+                        <button className="btn-comprar" onClick={handleAgregar}>Agregar al carrito</button>
+                    </div>
+                </div>
             </div>
-            <button className="btn-comprar" onClick={handleAgregar}>Agregar al carrito</button>
-          </div>
+            <Footer />
         </div>
-      </div>
-      <Footer />
-    </div>
-  );
+    );
 };
 
 export default Unidad;

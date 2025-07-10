@@ -1,98 +1,106 @@
+// src/components/Registro.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Importar useNavigate
 import Header from './Header';
 import Footer from './Footer';
+import MessageDisplay from './MessageDisplay'; // Importar el componente de mensajes
 import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = import.meta.env.VITE_API_URL || ''; // Obtener la URL de la API
 
 const Registro = () => {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    correo: '',
-    contraseña: ''
-  });
+    const [formData, setFormData] = useState({
+        nombre: '',
+        correo: '',
+        contraseña: ''
+    });
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('info'); // 'success' o 'error'
+    const navigate = useNavigate(); // Hook para la navegación programática
 
-  const [mensaje, setMensaje] = useState('');
-  const [error, setError] = useState(false);
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setMessage(''); // Limpiar mensajes al cambiar los campos
+    };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setMensaje('');
-    setError(false);
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`${API_URL}/api/usuarios/registro`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+            if (res.ok) {
+                setMessage('Registro exitoso. Ya puedes iniciar sesión.');
+                setMessageType('success');
+                setFormData({ nombre: '', correo: '', contraseña: '' }); // Limpiar formulario
+                // Opcional: Redirigir al usuario a la página de login después de un breve retraso
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000);
+            } else {
+                const errorData = await res.json(); // Asumimos que el backend siempre devuelve JSON para errores
+                setMessage(errorData.mensaje || 'Error en el registro.');
+                setMessageType('error');
+                console.error('Error en el registro:', errorData);
+            }
+        } catch (error) {
+            setMessage('Error en la conexión con el servidor. Inténtalo de nuevo más tarde.');
+            setMessageType('error');
+            console.error('Error de red al registrar:', error);
+        }
+    };
 
-    try {
-      const res = await fetch(`${API_URL}/api/usuarios/registro`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      if (res.ok) {
-        setMensaje('Registro exitoso. Ya puedes iniciar sesión.');
-        setError(false);
-        setFormData({ nombre: '', correo: '', contraseña: '' });
-      } else {
-        const errorText = await res.text();
-        setMensaje(`Error: ${errorText}`);
-        setError(true);
-      }
-    } catch (error) {
-      setMensaje('Error en la conexión con el servidor.');
-      setError(true);
-      console.error(error);
-    }
-  };
-
-  return (
-    <div className="page-container">
-      <Header />
-      <main className="form-content">
-        <h2>Registro</h2>
-        <form onSubmit={handleSubmit} className="form">
-          <input
-            name="nombre"
-            placeholder="Nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="correo"
-            type="email"
-            placeholder="Correo"
-            value={formData.correo}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="contraseña"
-            type="password"
-            placeholder="Contraseña"
-            value={formData.contraseña}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit">Registrarse</button>
-        </form>
-
-        {mensaje && (
-          <p style={{ color: error ? 'red' : 'green', marginTop: '1rem' }}>
-            {mensaje}
-          </p>
-        )}
-
-        <p>
-          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
-        </p>
-      </main>
-      <Footer />
-    </div>
-  );
+    return (
+        <div className="page-container">
+            <Header />
+            <main className="form-content">
+                {message && (
+                    <MessageDisplay
+                        message={message}
+                        type={messageType}
+                        onClose={() => setMessage('')}
+                    />
+                )}
+                <h2>Registro</h2>
+                <form onSubmit={handleSubmit} className="form">
+                    <input
+                        name="nombre"
+                        placeholder="Nombre"
+                        value={formData.nombre}
+                        onChange={handleChange}
+                        required
+                        aria-label="Nombre de usuario"
+                    />
+                    <input
+                        name="correo"
+                        type="email"
+                        placeholder="Correo"
+                        value={formData.correo}
+                        onChange={handleChange}
+                        required
+                        aria-label="Correo electrónico"
+                    />
+                    <input
+                        name="contraseña"
+                        type="password"
+                        placeholder="Contraseña"
+                        value={formData.contraseña}
+                        onChange={handleChange}
+                        required
+                        aria-label="Contraseña"
+                    />
+                    <button type="submit">Registrarse</button>
+                </form>
+                <p>
+                    ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
+                </p>
+            </main>
+            <Footer />
+        </div>
+    );
 };
 
 export default Registro;
