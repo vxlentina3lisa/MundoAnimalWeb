@@ -51,12 +51,12 @@ const obtenerCarrito = async (req, res) => {
     try {
         // Consulta para obtener los productos del carrito con detalles del producto
         const query = `
-            SELECT 
-                c.id as carrito_item_id, 
-                c.producto_id, 
-                c.cantidad, 
-                p.nombre, 
-                p.precio, 
+            SELECT
+                c.id as carrito_item_id,
+                c.producto_id,
+                c.cantidad,
+                p.nombre,
+                p.precio,
                 p.imagen_url,
                 p.descripcion
             FROM carrito c

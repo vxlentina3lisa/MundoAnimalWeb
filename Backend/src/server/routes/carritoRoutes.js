@@ -1,13 +1,14 @@
 // src/server/routes/carritoRoutes.js
 const express = require('express');
 const router = express.Router();
-// Importar funciones del controlador de carrito (nombre de archivo corregido)
+// Importar funciones del controlador de carrito
+// ¡MUY IMPORTANTE: El nombre del archivo en tu servidor debe ser EXACTAMENTE 'carritoControllers.js'!
 const {
     agregarProductoAlCarrito,
     obtenerCarrito,
     eliminarProductoDelCarrito,
     actualizarCantidadProductoEnCarrito
-} = require('../controllers/carritoControllers'); // Corregido: 'carritoControllers'
+} = require('../controllers/carritoControllers'); // <-- Esta línea busca 'carritoControllers.js'
 const authMiddleware = require('../middlewares/authMiddleware'); // Middleware de autenticación
 
 // Ruta para agregar un producto al carrito (requiere autenticación)
