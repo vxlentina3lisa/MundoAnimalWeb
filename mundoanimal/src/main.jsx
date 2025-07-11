@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import App from './App.jsx';
 import Registro from './components/Registro.jsx';
 import InicioSesion from './components/Iniciodesesion.jsx';
