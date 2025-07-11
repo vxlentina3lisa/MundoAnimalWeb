@@ -63,7 +63,7 @@ const Nuevos = () => {
                                         src={fullImageUrl} 
                                         alt={producto.nombre}
                                         className="producto-imagen"
-                                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} // Fallback
+                                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }}
                                     />
                                     <h3 className="producto-nombre">{producto.nombre}</h3>
                                     <p className="producto-precio">${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
