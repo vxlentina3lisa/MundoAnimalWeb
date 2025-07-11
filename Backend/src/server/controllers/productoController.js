@@ -16,12 +16,12 @@ const obtenerProductos = async (req, res) => {
     try {
         let resultado;
         if (soloNuevos) {
-            // Consulta adaptada para la columna 'nuevo' donde 1 es nuevo
+            // Consulta adaptada para la columna 'nuevo' donde '1' es nuevo y es tipo CHAR/VARCHAR
             resultado = await pool.query(`
                 SELECT * FROM productos
-                WHERE nuevo = 1
+                WHERE nuevo = '1'
             `);
-            console.log('Backend: Consulta para productos nuevos (columna nuevo = 1) ejecutada. Filas encontradas:', resultado.rowCount);
+            console.log('Backend: Consulta para productos nuevos (columna nuevo = \'1\') ejecutada. Filas encontradas:', resultado.rowCount);
         } else {
             // Consulta para obtener todos los productos
             resultado = await pool.query('SELECT * FROM productos');

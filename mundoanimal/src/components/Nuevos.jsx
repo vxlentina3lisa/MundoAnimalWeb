@@ -82,4 +82,3 @@ const Nuevos = () => {
 };
 
 export default Nuevos;
-                
