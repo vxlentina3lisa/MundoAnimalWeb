@@ -1,27 +1,22 @@
-// src/components/Carrito.jsx
 import React, { useState } from 'react';
 import { useCarrito } from '../context/CarritoContext';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import MessageDisplay from './MessageDisplay'; // Importar el componente de mensajes
-import '../App.css'; // Asegúrate de que los estilos estén importados
+import MessageDisplay from './MessageDisplay'
+import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL; // Obtener la URL de la API
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Carrito = () => {
     const { carrito, vaciarCarrito, eliminarDelCarrito, actualizarCantidadProducto } = useCarrito();
     const { usuario } = useAuth();
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('info');
-
-    // Si el usuario no está autenticado, redirigir a la página de login
     if (!usuario) {
         return <Navigate to="/login" replace />;
     }
-
-    // Asegurarse de que precio sea un número antes de la suma
     const total = carrito.reduce((sum, item) => sum + (parseFloat(item.precio) || 0) * item.cantidad, 0);
 
     const handleActualizarCantidad = async (productoId, nuevaCantidad) => {
@@ -70,7 +65,6 @@ const Carrito = () => {
                                     />
                                     <div className="carrito-item-info">
                                         <h3>{producto.nombre}</h3>
-                                        {/* Asegurarse de que producto.precio sea un número antes de toFixed */}
                                         <p>${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
                                         <div className="carrito-item-cantidad">
                                             <label htmlFor={`cantidad-${producto.producto_id}`}>Cantidad:</label>

@@ -1,13 +1,4 @@
-// src/server/models/carritoModels.js
 const { pool } = require('../database/db');
-
-/**
- * Agrega un nuevo item al carrito.
- * @param {number} usuarioId - ID del usuario.
- * @param {number} productoId - ID del producto.
- * @param {number} cantidad - Cantidad del producto.
- * @returns {Promise<object>} El item del carrito agregado.
- */
 const agregarAlCarrito = async (usuarioId, productoId, cantidad) => {
     try {
         const resultado = await pool.query(
@@ -23,11 +14,6 @@ const agregarAlCarrito = async (usuarioId, productoId, cantidad) => {
     }
 };
 
-/**
- * Obtiene todos los items del carrito para un usuario específico.
- * @param {number} usuarioId - ID del usuario.
- * @returns {Promise<Array<object>>} Lista de items en el carrito.
- */
 const obtenerCarritoPorUsuario = async (usuarioId) => {
     try {
         const resultado = await pool.query(
@@ -44,12 +30,6 @@ const obtenerCarritoPorUsuario = async (usuarioId) => {
     }
 };
 
-/**
- * Elimina un item específico del carrito.
- * @param {number} usuarioId - ID del usuario.
- * @param {number} productoId - ID del producto a eliminar.
- * @returns {Promise<object>} El item del carrito eliminado.
- */
 const eliminarDelCarrito = async (usuarioId, productoId) => {
     try {
         const resultado = await pool.query(
@@ -65,13 +45,6 @@ const eliminarDelCarrito = async (usuarioId, productoId) => {
     }
 };
 
-/**
- * Actualiza la cantidad de un producto en el carrito.
- * @param {number} usuarioId - ID del usuario.
- * @param {number} productoId - ID del producto.
- * @param {number} cantidad - Nueva cantidad.
- * @returns {Promise<object>} El item del carrito actualizado.
- */
 const actualizarCantidadEnCarrito = async (usuarioId, productoId, cantidad) => {
     try {
         const resultado = await pool.query(

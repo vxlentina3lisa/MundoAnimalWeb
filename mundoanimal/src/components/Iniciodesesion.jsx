@@ -1,13 +1,12 @@
-// src/components/Iniciodesesion.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import { useAuth } from '../context/AuthContext'; // Importar el contexto de autenticación
-import MessageDisplay from './MessageDisplay'; // Importar el componente de mensajes
-import '../App.css'; // Asegúrate de que los estilos estén importados
+import { useAuth } from '../context/AuthContext';
+import MessageDisplay from './MessageDisplay';
+import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL; // Obtener la URL de la API desde las variables de entorno
+const API_URL = import.meta.env.VITE_API_URL;
 
 const InicioSesion = () => {
     const [correo, setCorreo] = useState('');
@@ -16,7 +15,7 @@ const InicioSesion = () => {
     const [messageType, setMessageType] = useState('info');
 
     const navigate = useNavigate();
-    const { iniciarSesion } = useAuth(); // Obtener la función iniciarSesion del contexto
+    const { iniciarSesion } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,14 +30,12 @@ const InicioSesion = () => {
 
             if (res.ok) {
                 const data = await res.json();
-                // Llamar a iniciarSesion del contexto, pasando los datos del usuario y el token
                 iniciarSesion(data.usuario, data.token);
                 setMessage('Inicio de sesión exitoso.');
                 setMessageType('success');
-                // Redirigir al usuario a la página de inicio o al carrito
                 navigate('/');
             } else {
-                const errorData = await res.json(); // Asumimos que el backend siempre devuelve JSON para errores
+                const errorData = await res.json();
                 setMessage(errorData.mensaje || 'Error en el inicio de sesión.');
                 setMessageType('error');
                 console.error('Error en el inicio de sesión:', errorData);
@@ -53,7 +50,7 @@ const InicioSesion = () => {
     return (
         <div className="inicio-container">
             <Header />
-            <main className="form-content"> {/* Usar main para el contenido principal */}
+            <main className="form-content">
                 {message && (
                     <MessageDisplay
                         message={message}

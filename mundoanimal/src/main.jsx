@@ -1,4 +1,3 @@
-// src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -18,7 +17,6 @@ import { CarritoProvider } from './context/CarritoContext.jsx';
 import './index.css';
 import './App.css';
 
-// Añade este console.log aquí para verificar si main.jsx se está ejecutando
 console.log('main.jsx: Iniciando la aplicación React...');
 
 ReactDOM.createRoot(document.getElementById('root')).render(

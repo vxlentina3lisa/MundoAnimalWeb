@@ -1,12 +1,11 @@
-// src/components/Registro.jsx
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Importar useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import MessageDisplay from './MessageDisplay'; // Importar el componente de mensajes
+import MessageDisplay from './MessageDisplay'; 
 import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL || ''; // Obtener la URL de la API
+const API_URL = import.meta.env.VITE_API_URL || ''; 
 
 const Registro = () => {
     const [formData, setFormData] = useState({
@@ -15,12 +14,12 @@ const Registro = () => {
         contraseña: ''
     });
     const [message, setMessage] = useState('');
-    const [messageType, setMessageType] = useState('info'); // 'success' o 'error'
-    const navigate = useNavigate(); // Hook para la navegación programática
+    const [messageType, setMessageType] = useState('info'); 
+    const navigate = useNavigate(); 
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        setMessage(''); // Limpiar mensajes al cambiar los campos
+        setMessage(''); 
     };
 
     const handleSubmit = async (e) => {
@@ -35,13 +34,12 @@ const Registro = () => {
             if (res.ok) {
                 setMessage('Registro exitoso. Ya puedes iniciar sesión.');
                 setMessageType('success');
-                setFormData({ nombre: '', correo: '', contraseña: '' }); // Limpiar formulario
-                // Opcional: Redirigir al usuario a la página de login después de un breve retraso
+                setFormData({ nombre: '', correo: '', contraseña: '' }); 
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000);
             } else {
-                const errorData = await res.json(); // Asumimos que el backend siempre devuelve JSON para errores
+                const errorData = await res.json(); 
                 setMessage(errorData.mensaje || 'Error en el registro.');
                 setMessageType('error');
                 console.error('Error en el registro:', errorData);

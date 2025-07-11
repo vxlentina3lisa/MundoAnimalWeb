@@ -1,7 +1,7 @@
 {
   "name": "mundoanimalweb-backend",
   "version": "1.0.0",
-  "description": "Backend para el proyecto MundoAnimal E-commerce",
+  "description": "Backend para el proyecto MundoAnimal",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",

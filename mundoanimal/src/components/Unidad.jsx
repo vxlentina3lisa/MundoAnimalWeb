@@ -1,16 +1,15 @@
-// src/components/Unidad.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import { useCarrito } from '../context/CarritoContext'; // Importar el contexto del carrito
-import MessageDisplay from './MessageDisplay'; // Importar el componente de mensajes
-import '../App.css'; // Asegúrate de que los estilos estén importados
+import { useCarrito } from '../context/CarritoContext'; 
+import MessageDisplay from './MessageDisplay'; 
+import '../App.css'; 
 
-const API_URL = import.meta.env.VITE_API_URL; // Obtener la URL de la API
+const API_URL = import.meta.env.VITE_API_URL; 
 
 const Unidad = () => {
-    const { id } = useParams(); // Obtener el ID del producto de la URL
+    const { id } = useParams(); 
     const [producto, setProducto] = useState(null);
     const [cantidad, setCantidad] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -18,9 +17,7 @@ const Unidad = () => {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('info');
 
-    const { agregarAlCarrito } = useCarrito(); // Obtener la función agregarAlCarrito del contexto
-
-    // Efecto para cargar los detalles del producto
+    const { agregarAlCarrito } = useCarrito();
     useEffect(() => {
         const fetchProducto = async () => {
             try {
@@ -29,7 +26,7 @@ const Unidad = () => {
                     throw new Error('Producto no encontrado.');
                 }
                 const data = await res.json();
-                console.log('Datos del producto recibidos del backend:', data); // LOG para depurar el objeto producto
+                console.log('Datos del producto recibidos del backend:', data);
                 setProducto(data);
             } catch (err) {
                 setError(err.message);
@@ -40,7 +37,7 @@ const Unidad = () => {
             }
         };
         fetchProducto();
-    }, [id]); // Dependencia: el ID del producto
+    }, [id]); 
 
     const handleAgregar = async () => {
         if (producto) {
@@ -54,19 +51,16 @@ const Unidad = () => {
     if (error) return <p className="error-message">{error}</p>;
     if (!producto) return <p className="not-found-message">Producto no disponible.</p>;
 
-    // --- Lógica para limpiar la URL de la imagen ---
     let cleanedImageUrl = producto.imagen_url;
     if (cleanedImageUrl) {
-        // Eliminar cualquier prefijo como '/assets/imagenes/' o '/imagenes/'
         cleanedImageUrl = cleanedImageUrl.replace(/^\/?(assets\/)?imagenes\//, '');
-        // Asegurarse de que no haya barras iniciales o finales innecesarias
-        cleanedImageUrl = cleanedImageUrl.split('/').pop(); // Obtener solo el nombre del archivo
+        cleanedImageUrl = cleanedImageUrl.split('/').pop();
     } else {
-        cleanedImageUrl = 'placeholder.jpg'; // Imagen de fallback si no hay URL
+        cleanedImageUrl = 'placeholder.jpg';
     }
 
     const fullImageUrl = `${API_URL}/assets/imagenes/${cleanedImageUrl}`;
-    console.log('URL de la imagen final construida:', fullImageUrl); // LOG para depurar la URL completa
+    console.log('URL de la imagen final construida:', fullImageUrl);
 
     return (
         <div>
@@ -81,7 +75,7 @@ const Unidad = () => {
             <div className="contenedor-principal">
                 <div className="tarjeta-producto">
                     <img
-                        src={fullImageUrl} // Usar la URL limpia y completa
+                        src={fullImageUrl} 
                         alt={producto.nombre}
                         className="imagen-producto"
                         onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} // Fallback si la imagen no carga

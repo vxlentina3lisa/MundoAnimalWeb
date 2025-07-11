@@ -1,10 +1,8 @@
-// src/components/Productos.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../App.css'; // Asegúrate de que los estilos estén importados
+import '../App.css'; 
 
-const API_URL = import.meta.env.VITE_API_URL; // Obtener la URL de la API
-
+const API_URL = import.meta.env.VITE_API_URL;
 const Productos = () => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +16,7 @@ const Productos = () => {
                     throw new Error('Error al cargar todos los productos.');
                 }
                 const data = await res.json();
-                console.log('Productos recibidos para Productos.jsx:', data); // Log para depuración
+                console.log('Productos recibidos para Productos.jsx:', data);
                 setProductos(data);
             } catch (err) {
                 console.error('Error al cargar productos:', err);
@@ -41,18 +39,15 @@ const Productos = () => {
                     <p>No hay productos disponibles en este momento.</p>
                 ) : (
                     productos.map((producto) => {
-                        // --- Lógica para limpiar la URL de la imagen (replicada de Unidad.jsx) ---
                         let cleanedImageUrl = producto.imagen_url;
                         if (cleanedImageUrl) {
-                            // Eliminar cualquier prefijo como '/assets/imagenes/' o '/imagenes/'
                             cleanedImageUrl = cleanedImageUrl.replace(/^\/?(assets\/)?imagenes\//, '');
-                            // Obtener solo el nombre del archivo
                             cleanedImageUrl = cleanedImageUrl.split('/').pop();
                         } else {
-                            cleanedImageUrl = 'placeholder.jpg'; // Imagen de fallback si no hay URL
+                            cleanedImageUrl = 'placeholder.jpg'; 
                         }
                         const fullImageUrl = `${API_URL}/assets/imagenes/${cleanedImageUrl}`;
-                        console.log(`Producto ${producto.id}: URL de imagen construida:`, fullImageUrl); // Log para depuración
+                        console.log(`Producto ${producto.id}: URL de imagen construida:`, fullImageUrl);
 
                         return (
                             <Link
@@ -62,7 +57,7 @@ const Productos = () => {
                             >
                                 <div className="card-producto">
                                     <img
-                                        src={fullImageUrl} // Usar la URL limpia y completa
+                                        src={fullImageUrl}
                                         alt={producto.nombre}
                                         className="producto-imagen"
                                         onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} // Fallback

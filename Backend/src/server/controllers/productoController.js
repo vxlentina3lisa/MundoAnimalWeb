@@ -1,13 +1,6 @@
-// src/server/controllers/productoController.js
 const { pool } = require('../database/db');
 
-/**
- * Obtiene todos los productos o solo los marcados como "nuevos" usando la columna 'nuevo'.
- * @param {object} req - Objeto de solicitud.
- * @param {object} res - Objeto de respuesta.
- */
 const obtenerProductos = async (req, res) => {
-    // Determinar si se deben obtener solo productos "nuevos" a partir del query param
     const soloNuevos = req.query.nuevos === 'true';
 
     console.log('Backend: obtenerProductos - req.query.nuevos:', req.query.nuevos);
@@ -15,15 +8,13 @@ const obtenerProductos = async (req, res) => {
 
     try {
         let resultado;
-        if (soloNuevos) {
-            // Consulta adaptada para la columna 'nuevo' donde '1' es nuevo y es tipo CHAR/VARCHAR
+        if (soloNuevos) {R
             resultado = await pool.query(`
                 SELECT * FROM productos
                 WHERE nuevo = '1'
             `);
             console.log('Backend: Consulta para productos nuevos (columna nuevo = \'1\') ejecutada. Filas encontradas:', resultado.rowCount);
         } else {
-            // Consulta para obtener todos los productos
             resultado = await pool.query('SELECT * FROM productos');
             console.log('Backend: Consulta para TODOS los productos ejecutada. Filas encontradas:', resultado.rowCount);
         }
@@ -41,11 +32,6 @@ const obtenerProductos = async (req, res) => {
     }
 };
 
-/**
- * Obtiene un producto específico por su ID.
- * @param {object} req - Objeto de solicitud.
- * @param {object} res - Objeto de respuesta.
- */
 const obtenerProductoPorId = async (req, res) => {
     const { id } = req.params;
 

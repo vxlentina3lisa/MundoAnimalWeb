@@ -1,20 +1,7 @@
-// src/components/MessageDisplay.jsx
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types'; // Importar PropTypes
-
-/**
- * Componente para mostrar mensajes de notificación (éxito/error) en la UI.
- * Reemplaza el uso de `alert()`.
- * @param {object} props - Propiedades del componente.
- * @param {string} props.message - El mensaje a mostrar.
- * @param {string} [props.type='info'] - Tipo de mensaje ('success', 'error', 'info').
- * @param {number} [props.duration=3000] - Duración en milisegundos antes de que el mensaje desaparezca.
- * @param {function} props.onClose - Función a llamar cuando el mensaje se cierra.
- */
+import PropTypes from 'prop-types';
 const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) => {
-    const [isVisible, setIsVisible] = useState(false); // Inicia como falso, solo se muestra si hay mensaje
-
-    // Log para depuración: Verifica si el componente se está renderizando y qué props recibe
+    const [isVisible, setIsVisible] = useState(false); 
     console.log('MessageDisplay rendering:', { message, type, isVisible });
 
     useEffect(() => {
@@ -34,12 +21,11 @@ const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) =>
                 console.log('MessageDisplay: Limpiando temporizador.');
             };
         } else {
-            setIsVisible(false); // Ocultar si el mensaje está vacío
+            setIsVisible(false); 
             console.log('MessageDisplay: El mensaje está vacío, ocultando.');
         }
     }, [message, duration, onClose]);
 
-    // Solo renderiza si el mensaje está presente Y es visible
     if (!isVisible || !message) {
         return null;
     }
@@ -54,23 +40,23 @@ const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) =>
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
         transition: 'opacity 0.3s ease-in-out',
         opacity: isVisible ? 1 : 0,
-        color: '#fff', // Color de texto por defecto
-        position: 'fixed', // Asegura que esté en la parte superior y visible
+        color: '#fff',
+        position: 'fixed',
         top: '20px',
         left: '50%',
         transform: 'translateX(-50%)',
-        zIndex: 1000 // Asegura que esté por encima de otro contenido
+        zIndex: 100
     };
 
     const typeStyles = {
         success: {
-            backgroundColor: '#4CAF50', // Verde
+            backgroundColor: '#4CAF50',
         },
         error: {
-            backgroundColor: '#f44336', // Rojo
+            backgroundColor: '#f44336', 
         },
         info: {
-            backgroundColor: '#2196F3', // Azul
+            backgroundColor: '#2196F3', 
         },
     };
 
@@ -81,12 +67,11 @@ const MessageDisplay = ({ message, type = 'info', duration = 3000, onClose }) =>
     );
 };
 
-// Añadir la validación de PropTypes
 MessageDisplay.propTypes = {
-    message: PropTypes.string.isRequired, // 'message' es una cadena y es requerida
-    type: PropTypes.oneOf(['success', 'error', 'info']), // 'type' debe ser uno de estos valores
-    duration: PropTypes.number, // 'duration' es un número
-    onClose: PropTypes.func, // 'onClose' es una función
+    message: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(['success', 'error', 'info']), 
+    duration: PropTypes.number,
+    onClose: PropTypes.func, 
 };
 
 export default MessageDisplay;
