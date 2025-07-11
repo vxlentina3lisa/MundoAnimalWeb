@@ -13,6 +13,7 @@ const Nuevos = () => {
     useEffect(() => {
         const fetchProductosNuevos = async () => {
             try {
+                // La URL incluye ?nuevos=true para indicar al backend que filtre por productos nuevos
                 const res = await fetch(`${API_URL}/api/productos?nuevos=true`);
                 if (!res.ok) {
                     throw new Error('Error al cargar productos nuevos.');
@@ -81,3 +82,4 @@ const Nuevos = () => {
 };
 
 export default Nuevos;
+                
