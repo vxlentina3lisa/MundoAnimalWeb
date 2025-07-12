@@ -1,21 +1,33 @@
 const { pool } = require('../database/db');
 const obtenerProductos = async (req, res) => {
     const soloNuevos = req.query.nuevos === 'true';
+    const categoriaId = req.query.categoria_id;
+
     console.log('Backend: obtenerProductos - req.query.nuevos:', req.query.nuevos);
     console.log('Backend: obtenerProductos - soloNuevos (booleano):', soloNuevos);
+    console.log('Backend: obtenerProductos - req.query.categoria_id:', categoriaId); 
 
     try {
-        let resultado;
+        let query = 'SELECT * FROM productos';
+        const queryParams = [];
+        const conditions = [];
+
         if (soloNuevos) {
-            resultado = await pool.query(`
-                SELECT * FROM productos
-                WHERE nuevo = '1'
-            `);
-            console.log('Backend: Consulta para productos nuevos (columna nuevo = \'1\') ejecutada. Filas encontradas:', resultado.rowCount);
-        } else {
-            resultado = await pool.query('SELECT * FROM productos');
-            console.log('Backend: Consulta para TODOS los productos ejecutada. Filas encontradas:', resultado.rowCount);
+            conditions.push(`nuevo = '1'`);
         }
+
+        if (categoriaId) {
+            conditions.push(`categoria_id = $1`);
+            queryParams.push(categoriaId);
+        }
+
+        if (conditions.length > 0) {
+            query += ` WHERE ${conditions.join(' AND ')}`;
+        }
+
+        console.log('Backend: Ejecutando consulta:', query, queryParams);
+        const resultado = await pool.query(query, queryParams);
+        console.log('Backend: Consulta ejecutada. Filas encontradas:', resultado.rowCount);
 
         const productosFormateados = resultado.rows.map(producto => ({
             ...producto,
