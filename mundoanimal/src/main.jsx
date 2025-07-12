@@ -33,7 +33,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/producto/:id" element={<Unidad />} />
             <Route path="/categorias/:categoria" element={<Productos />} />
             <Route element={<ProtectedRoute />}>
-              <Route path="/carrito" element={<Carrito />} />
+            <Route path="/carrito" element={<Carrito />} />
             </Route>
 
           </Routes>

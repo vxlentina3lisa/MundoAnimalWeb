@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 export const AuthContext = createContext();
@@ -6,10 +5,9 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [usuario, setUsuario] = useState(null);
     const [token, setToken] = useState(null);
-    const [loading, setLoading] = useState(true); // Nuevo estado para controlar la carga inicial
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
-        // Al cargar la aplicación, intentar recuperar el usuario y el token de localStorage
         const usuarioGuardado = localStorage.getItem('usuario');
         const tokenGuardado = localStorage.getItem('token');
 
@@ -17,14 +15,9 @@ export const AuthProvider = ({ children }) => {
             setUsuario(JSON.parse(usuarioGuardado));
             setToken(tokenGuardado);
         }
-        setLoading(false); // La carga inicial ha terminado
+        setLoading(false); 
     }, []);
 
-    /**
-     * Inicia la sesión del usuario, guardando los datos del usuario y el token.
-     * @param {object} usuarioData - Datos del usuario (id, nombre, correo).
-     * @param {string} jwtToken - El token JWT recibido del backend.
-     */
     const iniciarSesion = (usuarioData, jwtToken) => {
         setUsuario(usuarioData);
         setToken(jwtToken);
@@ -32,9 +25,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', jwtToken);
     };
 
-    /**
-     * Cierra la sesión del usuario, eliminando los datos y el token.
-     */
     const cerrarSesion = () => {
         setUsuario(null);
         setToken(null);
@@ -42,9 +32,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
     };
 
-    // Proveer el contexto solo cuando la carga inicial haya terminado
     if (loading) {
-        return <div>Cargando autenticación...</div>; // O un spinner de carga
+        return <div>Cargando autenticación...</div>; 
     }
 
     return (
