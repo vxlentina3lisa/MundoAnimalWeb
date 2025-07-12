@@ -5,11 +5,10 @@ import Footer from './Footer';
 import { useCarrito } from '../context/CarritoContext'; 
 import MessageDisplay from './MessageDisplay'; 
 import '../App.css'; 
-
 const API_URL = import.meta.env.VITE_API_URL; 
 
 const Unidad = () => {
-    const { id } = useParams();
+    const { id } = useParams(); 
     const [producto, setProducto] = useState(null);
     const [cantidad, setCantidad] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -36,7 +35,7 @@ const Unidad = () => {
             }
         };
         fetchProducto();
-    }, [id]); 
+    }, [id]);
 
     const handleAgregar = async () => {
         if (producto) {
@@ -49,6 +48,14 @@ const Unidad = () => {
     if (loading) return <p className="loading-message">Cargando producto...</p>;
     if (error) return <p className="error-message">{error}</p>;
     if (!producto) return <p className="not-found-message">Producto no disponible.</p>;
+    let cleanedImageUrl = producto.imagen_url;
+    if (cleanedImageUrl) {
+        cleanedImageUrl = cleanedImageUrl.replace(/^\/?(assets\/)?imagenes\//, '');
+        cleanedImageUrl = cleanedImageUrl.split('/').pop();
+    } else {
+        cleanedImageUrl = 'placeholder.jpg';
+    }
+    const fullImageUrl = `${API_URL}/assets/imagenes/${cleanedImageUrl}`;
 
     return (
         <div>
@@ -63,9 +70,10 @@ const Unidad = () => {
             <div className="contenedor-principal">
                 <div className="tarjeta-producto">
                     <img
-                        src={`${API_URL}/assets/imagenes/${producto.imagen_url}`}
+                        src={fullImageUrl} 
                         alt={producto.nombre}
                         className="imagen-producto"
+                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }}
                     />
                     <div className="info-producto">
                         <h2>{producto.nombre}</h2>
