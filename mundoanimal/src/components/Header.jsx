@@ -1,44 +1,98 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import '../App.css';
+import { useAuth } from '../context/AuthContext';
+import MessageDisplay from './MessageDisplay';
 
-import App from './App.jsx';
-import Registro from './components/Registro.jsx';
-import InicioSesion from './components/Iniciodesesion.jsx';
-import Unidad from './components/Unidad.jsx';
-import Carrito from './components/Carrito.jsx';
-import Productos from './components/Productos.jsx';
-import Nuevos from './components/Nuevos.jsx';
-import ProtectedRoute from './ProtectedRoute.jsx';
+const Header = () => {
+    const [mostrarInfo, setMostrarInfo] = useState(false);
+    const [busqueda, setBusqueda] = useState("");
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('info');
 
-import { AuthProvider } from './context/AuthContext.jsx';
-import { CarritoProvider } from './context/CarritoContext.jsx';
+    const { usuario, cerrarSesion } = useAuth();
+    const navigate = useNavigate();
 
-import './index.css';
-import './App.css';
+    const toggleInfo = () => setMostrarInfo(!mostrarInfo);
+    const handleBusquedaChange = (e) => setBusqueda(e.target.value);
 
-console.log('main.jsx: Iniciando la aplicación React...');
+    const handleBuscar = () => {
+        setMessage(`Buscando: ${busqueda}`);
+        setMessageType('info');
+        console.log(`Buscando: ${busqueda}`);
+    };
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <CarritoProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/registro" element={<Registro />} />
-            <Route path="/login" element={<InicioSesion />} />
-            <Route path="/nuevos" element={<Nuevos />} />
-            <Route path="/productos" element={<Productos />} /> 
-            <Route path="/producto/:id" element={<Unidad />} />
-            <Route path="/categorias/:categoria" element={<Productos />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/carrito" element={<Carrito />} />
-            </Route>
+    const handleLogout = () => {
+        cerrarSesion();
+        setMessage('Sesión cerrada correctamente.');
+        setMessageType('success');
+        navigate('/');
+    };
 
-          </Routes>
-        </BrowserRouter>
-      </CarritoProvider>
-    </AuthProvider>
-  </React.StrictMode>,
-);
+    return (
+        <header>
+            {message && (
+                <MessageDisplay
+                    message={message}
+                    type={messageType}
+                    onClose={() => setMessage('')}
+                />
+            )}
+            <div className="top-bar">
+                <button onClick={toggleInfo} className="link-white btn-link" aria-expanded={mostrarInfo} aria-controls="cliente-info">
+                    Atención al cliente
+                </button>
+                {usuario ? (
+                    <>
+                        <span className="link-white">Hola, {usuario.nombre}</span>
+                        <button onClick={handleLogout} className="link-white btn-link">Cerrar sesión</button>
+                    </>
+                ) : (
+                    <Link to="/login" className="link-white">Iniciar sesión</Link>
+                )}
+            </div>
+            {mostrarInfo && (
+                <div id="cliente-info" className="cliente-info" role="region" aria-live="polite">
+                    <p><strong>En MundoAnimal nos importa tu experiencia.</strong> Estamos aquí para ayudarte en todo lo que necesites, porque tu satisfacción es nuestra prioridad.</p>
+                    <p>¿Tienes dudas sobre nuestros productos, métodos de pago o tiempos de envío? Nuestro equipo de atención al cliente está disponible para responder tus preguntas y ofrecerte soluciones rápidas y efectivas.</p>
+                    <p><strong>¿Cómo contactarnos?</strong></p>
+                    <ul>
+                        <li>Escríbenos al correo: soporte@mundoanimal.com</li>
+                        <li>Llámanos al: +56976739599 </li>
+                    </ul>
+                    <p>Además, si tienes alguna sugerencia o comentario, ¡nos encantaría escucharte! Queremos mejorar día a día para brindarte la mejor experiencia de compra.</p>
+                    <p>Gracias por confiar en nosotros. ¡Estamos para ayudarte!</p>
+                </div>
+            )}
+            <div className="middle-bar">
+                <Link to="/">
+                    <img src={logo} alt="MundoAnimal" className="logo" />
+                </Link>
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Buscar productos..."
+                        value={busqueda}
+                        onChange={handleBusquedaChange}
+                        aria-label="Buscar productos"
+                    />
+                    <button className="btn-buscar" onClick={handleBuscar} aria-label="Buscar">
+                        🔍
+                    </button>
+                </div>
+                <div className="iconos">
+                    <Link to="/carrito" className="link-black" aria-label="Ir al carrito de compras"> 🛒  Carrito</Link>
+                </div>
+            </div>
+            <nav className="main-nav" aria-label="Navegación principal">
+                <Link to="/categorias/alimento">ALIMENTO</Link>
+                <Link to="/categorias/snacks">SNACKS</Link>
+                <Link to="/categorias/accesorios">ACCESORIOS</Link>
+                <Link to="/contacto">CONTACTO</Link>
+            </nav>
+        </header>
+    );
+};
+
+export default Header;
