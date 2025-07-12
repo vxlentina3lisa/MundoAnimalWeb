@@ -1,64 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import '../App.css'; 
+const { pool } = require('../database/db');
 
-const API_URL = import.meta.env.VITE_API_URL; 
+const obtenerProductos = async (req, res) => {
+    const soloNuevos = req.query.nuevos === 'true';
+    const categoriaId = req.query.categoria_id;
 
-const Productos = () => {
-    const [productos, setProductos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    console.log('Backend: obtenerProductos - req.query.nuevos:', req.query.nuevos);
+    console.log('Backend: obtenerProductos - soloNuevos (booleano):', soloNuevos);
+    console.log('Backend: obtenerProductos - req.query.categoria_id:', categoriaId);
 
-    useEffect(() => {
-        const fetchAllProductos = async () => {
-            try {
-                const res = await fetch(`${API_URL}/api/productos`);
-                if (!res.ok) {
-                    throw new Error('Error al cargar todos los productos.');
-                }
-                const data = await res.json();
-                setProductos(data);
-            } catch (err) {
-                console.error('Error al cargar productos:', err);
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchAllProductos();
-    }, []);
+    try {
+        let query = 'SELECT * FROM productos';
+        const queryParams = [];
+        const conditions = [];
 
-    if (loading) return <p className="loading-message">Cargando productos...</p>;
-    if (error) return <p className="error-message">Error: {error}</p>;
+        if (soloNuevos) {
+            conditions.push(`nuevo = '1'`);
+        }
 
-    return (
-        <section className="seccion">
-            <h2>Todos los productos</h2>
-            <div className="productos-grid">
-                {productos.length === 0 ? (
-                    <p>No hay productos disponibles en este momento.</p>
-                ) : (
-                    productos.map((producto) => (
-                        <Link
-                            to={`/producto/${producto.id}`}
-                            key={producto.id}
-                            className="card-producto-link"
-                        >
-                            <div className="card-producto">
-                                <img
-                                    src={`${API_URL}/assets/imagenes/${producto.imagen_url}`} 
-                                    alt={producto.nombre}
-                                    className="producto-imagen" 
-                                />
-                                <h3 className="producto-nombre">{producto.nombre}</h3>
-                                <p className="producto-precio">${Math.floor(parseFloat(producto.precio) || 0)}</p>
-                            </div>
-                        </Link>
-                    ))
-                )}
-            </div>
-        </section>
-    );
+        if (categoriaId) {
+            conditions.push(`categoria_id = $1`);
+            queryParams.push(categoriaId);
+        }
+
+        if (conditions.length > 0) {
+            query += ` WHERE ${conditions.join(' AND ')}`;
+        }
+
+        console.log('Backend: Ejecutando consulta:', query, queryParams);
+        const resultado = await pool.query(query, queryParams);
+        console.log('Backend: Consulta ejecutada. Filas encontradas:', resultado.rowCount);
+
+        const productosFormateados = resultado.rows.map(producto => ({
+            ...producto,
+            imagen_url: producto.imagen_url
+        }));
+
+        res.status(200).json(productosFormateados);
+    } catch (error) {
+        console.error('Backend: Error obteniendo productos:', error.message);
+        console.error('Backend: Detalles del error:', error);
+        res.status(500).json({ mensaje: 'Error interno del servidor al obtener productos.', error: error.message });
+    }
 };
 
-export default Productos;
+const obtenerProductoPorId = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const resultado = await pool.query('SELECT * FROM productos WHERE id = $1', [id]);
+
+        if (resultado.rows.length === 0) {
+            return res.status(404).json({ mensaje: 'Producto no encontrado.' });
+        }
+
+        const producto = resultado.rows[0];
+        producto.imagen_url = producto.imagen_url;
+
+        res.status(200).json(producto);
+    } catch (error) {
+        console.error('Backend: Error obteniendo producto por ID:', error.message);
+        res.status(500).json({ mensaje: 'Error interno del servidor al obtener producto por ID.', error: error.message });
+    }
+};
+
+module.exports = {
+    obtenerProductos,
+    obtenerProductoPorId
+};
