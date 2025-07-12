@@ -4,10 +4,10 @@ import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import MessageDisplay from './MessageDisplay'
+import MessageDisplay from './MessageDisplay';
 import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL; 
 
 const Carrito = () => {
     const { carrito, vaciarCarrito, eliminarDelCarrito, actualizarCantidadProducto } = useCarrito();
@@ -65,7 +65,7 @@ const Carrito = () => {
                                     />
                                     <div className="carrito-item-info">
                                         <h3>{producto.nombre}</h3>
-                                        <p>${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
+                                        <p>${Math.floor(parseFloat(producto.precio) || 0)}</p>
                                         <div className="carrito-item-cantidad">
                                             <label htmlFor={`cantidad-${producto.producto_id}`}>Cantidad:</label>
                                             <input

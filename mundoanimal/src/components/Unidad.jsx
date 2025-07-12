@@ -9,7 +9,7 @@ import '../App.css';
 const API_URL = import.meta.env.VITE_API_URL; 
 
 const Unidad = () => {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const [producto, setProducto] = useState(null);
     const [cantidad, setCantidad] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ const Unidad = () => {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('info');
 
-    const { agregarAlCarrito } = useCarrito();
+    const { agregarAlCarrito } = useCarrito(); 
     useEffect(() => {
         const fetchProducto = async () => {
             try {
@@ -26,7 +26,6 @@ const Unidad = () => {
                     throw new Error('Producto no encontrado.');
                 }
                 const data = await res.json();
-                console.log('Datos del producto recibidos del backend:', data);
                 setProducto(data);
             } catch (err) {
                 setError(err.message);
@@ -51,17 +50,6 @@ const Unidad = () => {
     if (error) return <p className="error-message">{error}</p>;
     if (!producto) return <p className="not-found-message">Producto no disponible.</p>;
 
-    let cleanedImageUrl = producto.imagen_url;
-    if (cleanedImageUrl) {
-        cleanedImageUrl = cleanedImageUrl.replace(/^\/?(assets\/)?imagenes\//, '');
-        cleanedImageUrl = cleanedImageUrl.split('/').pop();
-    } else {
-        cleanedImageUrl = 'placeholder.jpg';
-    }
-
-    const fullImageUrl = `${API_URL}/assets/imagenes/${cleanedImageUrl}`;
-    console.log('URL de la imagen final construida:', fullImageUrl);
-
     return (
         <div>
             <Header />
@@ -75,15 +63,14 @@ const Unidad = () => {
             <div className="contenedor-principal">
                 <div className="tarjeta-producto">
                     <img
-                        src={fullImageUrl} 
+                        src={`${API_URL}/assets/imagenes/${producto.imagen_url}`}
                         alt={producto.nombre}
                         className="imagen-producto"
-                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} // Fallback si la imagen no carga
                     />
                     <div className="info-producto">
                         <h2>{producto.nombre}</h2>
                         <p>{producto.descripcion}</p>
-                        <p className="precio">${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
+                        <p className="precio">${Math.floor(parseFloat(producto.precio) || 0)}</p>
                         <div className="seccion-cantidad">
                             <label htmlFor="cantidad">Cantidad:</label>
                             <input
