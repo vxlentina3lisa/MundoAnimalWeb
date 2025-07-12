@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom'; 
+import { Link, useParams } from 'react-router-dom';
 import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL; 
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { categoria } = useParams();
+    const { categoria } = useParams(); 
 
     useEffect(() => {
         const fetchProductos = async () => {
             let url = `${API_URL}/api/productos`;
-            let pageTitle = 'Todos los productos'; 
+            let pageTitle = 'Todos los productos';
 
             if (categoria) {
                 let categoriaId;
@@ -41,7 +41,7 @@ const Productos = () => {
             }
             document.title = `MundoAnimal - ${pageTitle}`;
 
-            console.log('Frontend: URL de productos a solicitar:', url); 
+            console.log('Frontend (Productos.jsx): URL de productos a solicitar:', url);
 
             try {
                 const res = await fetch(url);
@@ -49,17 +49,19 @@ const Productos = () => {
                     throw new Error('Error al cargar productos.');
                 }
                 const data = await res.json();
-                console.log('Productos recibidos para Productos.jsx:', data); 
+                console.log('Frontend (Productos.jsx): Productos recibidos del backend:', data); 
                 setProductos(data);
             } catch (err) {
-                console.error('Error al cargar productos:', err);
+                console.error('Frontend (Productos.jsx): Error al cargar productos:', err);
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
         fetchProductos();
-    }, [categoria]); 
+    }, [categoria]);
+
+    console.log('Frontend (Productos.jsx): Estado actual de productos para renderizar:', productos);
 
     if (loading) return <p className="loading-message">Cargando productos...</p>;
     if (error) return <p className="error-message">Error: {error}</p>;
@@ -80,7 +82,7 @@ const Productos = () => {
                             cleanedImageUrl = 'placeholder.jpg';
                         }
                         const fullImageUrl = `${API_URL}/assets/imagenes/${cleanedImageUrl}`;
-                        console.log(`Producto ${producto.id}: URL de imagen construida:`, fullImageUrl);
+                        console.log(`Frontend (Productos.jsx): Producto ${producto.id}: URL de imagen construida:`, fullImageUrl);
 
                         return (
                             <Link
@@ -93,10 +95,10 @@ const Productos = () => {
                                         src={fullImageUrl}
                                         alt={producto.nombre}
                                         className="producto-imagen"
-                                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} 
+                                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }}
                                     />
                                     <h3 className="producto-nombre">{producto.nombre}</h3>
-                                    <p className="producto-precio">${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
+                                    <p className="producto-precio">${Math.floor(parseFloat(producto.precio) || 0)}</p>
                                 </div>
                             </Link>
                         );
