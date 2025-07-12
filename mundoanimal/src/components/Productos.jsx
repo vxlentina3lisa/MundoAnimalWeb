@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom'; 
 import '../App.css';
 
 const API_URL = import.meta.env.VITE_API_URL; 
@@ -8,7 +8,7 @@ const Productos = () => {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { categoria } = useParams(); 
+    const { categoria } = useParams();
 
     useEffect(() => {
         const fetchProductos = async () => {
@@ -77,7 +77,7 @@ const Productos = () => {
                             cleanedImageUrl = cleanedImageUrl.replace(/^\/?(assets\/)?imagenes\//, '');
                             cleanedImageUrl = cleanedImageUrl.split('/').pop();
                         } else {
-                            cleanedImageUrl = 'placeholder.jpg'; 
+                            cleanedImageUrl = 'placeholder.jpg';
                         }
                         const fullImageUrl = `${API_URL}/assets/imagenes/${cleanedImageUrl}`;
                         console.log(`Producto ${producto.id}: URL de imagen construida:`, fullImageUrl);
@@ -93,7 +93,7 @@ const Productos = () => {
                                         src={fullImageUrl}
                                         alt={producto.nombre}
                                         className="producto-imagen"
-                                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} // Fallback
+                                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/400x400/cccccc/000000?text=Imagen+no+disponible"; }} 
                                     />
                                     <h3 className="producto-nombre">{producto.nombre}</h3>
                                     <p className="producto-precio">${(parseFloat(producto.precio) || 0).toFixed(2)}</p>
