@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import App from './App.jsx';
 import Registro from './components/Registro.jsx';
 import InicioSesion from './components/Iniciodesesion.jsx';
@@ -10,10 +9,8 @@ import Carrito from './components/Carrito.jsx';
 import Productos from './components/Productos.jsx';
 import Nuevos from './components/Nuevos.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
-
 import { AuthProvider } from './context/AuthContext.jsx';
 import { CarritoProvider } from './context/CarritoContext.jsx';
-
 import './index.css';
 import './App.css';
 
