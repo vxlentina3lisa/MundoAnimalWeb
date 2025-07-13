@@ -4,8 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
-import MessageDisplay from './MessageDisplay';
-import '../App.css';
+import MessageDisplay from './MessageDisplay'; 
+import '../App.css'; 
 
 const API_URL = import.meta.env.VITE_API_URL; 
 
@@ -14,13 +14,16 @@ const Carrito = () => {
     const { usuario } = useAuth();
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('info');
+
     if (!usuario) {
         return <Navigate to="/login" replace />;
     }
-    const total = carrito.reduce((sum, item) => sum + (parseFloat(item.precio) || 0) * item.cantidad, 0);
+
+    const total = Math.floor(carrito.reduce((sum, item) => sum + (parseFloat(item.precio) || 0) * item.cantidad, 0));
 
     const handleActualizarCantidad = async (productoId, nuevaCantidad) => {
-        await actualizarCantidadProducto(productoId, nuevaCantidad);
+        const cantidadValida = Math.max(1, Number(nuevaCantidad)); 
+        await actualizarCantidadProducto(productoId, cantidadValida);
         setMessage('Cantidad actualizada.');
         setMessageType('success');
     };
@@ -50,36 +53,38 @@ const Carrito = () => {
                 />
             )}
             <div className="contenedor-principal">
-                <h2> 🛒 Carrito de Compras</h2>
+                <h2 className="carrito-titulo"> 🛒 Carrito de Compras</h2>
                 {carrito.length === 0 ? (
-                    <p>Tu carrito está vacío.</p>
+                    <p className="carrito-vacio-mensaje">Tu carrito está vacío. ¡Añade algunos productos!</p>
                 ) : (
-                    <div>
+                    <div className="carrito-contenido">
                         <ul className="carrito-lista">
-                            {carrito.map(producto => (
-                                <li key={producto.producto_id} className="carrito-item">
+                            {carrito.map(item => ( 
+                                <li key={item.producto_id} className="carrito-item">
                                     <img
-                                        src={`${API_URL}/assets/imagenes/${producto.imagen_url}`}
-                                        alt={producto.nombre}
+                                        src={`${API_URL}/assets/imagenes/${item.imagen_url}`}
+                                        alt={item.nombre}
                                         className="carrito-item-imagen"
+                                        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/100x100/cccccc/000000?text=No+Img"; }}
                                     />
                                     <div className="carrito-item-info">
-                                        <h3>{producto.nombre}</h3>
-                                        <p>${Math.floor(parseFloat(producto.precio) || 0)}</p>
+                                        <h3 className="carrito-item-nombre">{item.nombre}</h3>
+                                        <p className="carrito-item-precio">${Math.floor(parseFloat(item.precio) || 0)}</p>
                                         <div className="carrito-item-cantidad">
-                                            <label htmlFor={`cantidad-${producto.producto_id}`}>Cantidad:</label>
+                                            <label htmlFor={`cantidad-${item.producto_id}`}>Cantidad:</label>
                                             <input
-                                                id={`cantidad-${producto.producto_id}`}
+                                                id={`cantidad-${item.producto_id}`}
                                                 type="number"
                                                 min="1"
-                                                value={producto.cantidad}
-                                                onChange={(e) => handleActualizarCantidad(producto.producto_id, Number(e.target.value))}
-                                                aria-label={`Cantidad de ${producto.nombre}`}
+                                                value={item.cantidad}
+                                                onChange={(e) => handleActualizarCantidad(item.producto_id, e.target.value)}
+                                                aria-label={`Cantidad de ${item.nombre}`}
+                                                className="input-cantidad"
                                             />
                                             <button
-                                                onClick={() => handleEliminarProducto(producto.producto_id)}
+                                                onClick={() => handleEliminarProducto(item.producto_id)}
                                                 className="btn-eliminar-carrito"
-                                                aria-label={`Eliminar ${producto.nombre} del carrito`}
+                                                aria-label={`Eliminar ${item.nombre} del carrito`}
                                             >
                                                 Eliminar
                                             </button>
@@ -89,8 +94,9 @@ const Carrito = () => {
                             ))}
                         </ul>
                         <div className="carrito-resumen">
-                            <p><strong>Total:</strong> ${total.toFixed(2)}</p>
+                            <p className="carrito-total"><strong>Total:</strong> ${total}</p>
                             <button onClick={handleVaciarCarrito} className="btn-vaciar-carrito">Vaciar Carrito</button>
+                            <button className="btn-finalizar-compra">Finalizar Compra</button> 
                         </div>
                     </div>
                 )}
