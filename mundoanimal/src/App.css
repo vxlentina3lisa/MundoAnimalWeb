@@ -511,9 +511,7 @@ input[type="number"] {
     height: 70px;
   }
   .search-bar {
-    flex-basis: 100%;
-    order: 3;
-    max-width: 200px;
+    max-width: 400px; 
   }
   .iconos {
     gap: 10px;
