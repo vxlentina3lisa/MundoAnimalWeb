@@ -506,12 +506,15 @@ input[type="number"] {
   .middle-bar {
     padding: 10px 10px;
     gap: 10px;
+    justify-content: center;
   }
   .logo {
     height: 70px;
   }
   .search-bar {
-    max-width: 400px; 
+    flex-basis: 100%;
+    order: 3;
+    max-width: 400px;
   }
   .iconos {
     gap: 10px;
