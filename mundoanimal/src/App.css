@@ -169,7 +169,7 @@ h2 {
 
 .productos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.5rem;
 }
 
@@ -321,7 +321,7 @@ input[type="number"] {
 
 .carrito-titulo {
   font-size: 2.2rem;
-  color: var(--cafe); 
+  color: var(--cafe);
   text-align: center;
   margin-bottom: 30px;
   padding-top: 20px;
@@ -332,7 +332,7 @@ input[type="number"] {
   font-size: 1.2rem;
   color: #666;
   margin-top: 50px;
-  padding-bottom: 100px; 
+  padding-bottom: 100px;
 }
 
 .carrito-contenido {
@@ -368,7 +368,7 @@ input[type="number"] {
 }
 
 .carrito-item-imagen {
-  width: 90px; 
+  width: 90px;
   height: 90px;
   object-fit: cover;
   border-radius: 8px;
@@ -424,7 +424,7 @@ input[type="number"] {
 }
 
 .btn-eliminar-carrito {
-  background-color: #f44336; 
+  background-color: #f44336;
   color: white;
   padding: 8px 15px;
   border: none;
@@ -436,7 +436,7 @@ input[type="number"] {
 }
 
 .btn-eliminar-carrito:hover {
-  background-color: #d32f2f; 
+  background-color: #d32f2f;
 }
 
 .carrito-resumen {
@@ -453,7 +453,7 @@ input[type="number"] {
 .carrito-total {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--cafe); 
+  color: var(--cafe);
   margin: 0;
 }
 
@@ -474,22 +474,22 @@ input[type="number"] {
 }
 
 .btn-vaciar-carrito {
-  background-color: #ff9800; 
+  background-color: #ff9800;
   color: white;
 }
 
 .btn-vaciar-carrito:hover {
-  background-color: #e68a00; 
+  background-color: #e68a00;
   transform: translateY(-1px);
 }
 
 .btn-finalizar-compra {
-  background-color: var(--amarillo); 
-  color: var(--cafe); 
+  background-color: var(--amarillo);
+  color: var(--cafe);
 }
 
 .btn-finalizar-compra:hover {
-  background-color: #f7b347; 
+  background-color: #f7b347;
   transform: translateY(-1px);
 }
 
@@ -530,7 +530,7 @@ input[type="number"] {
   }
 
   .productos-grid {
-    grid-template-columns: repeat(5);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     padding: 1rem;
   }
@@ -633,7 +633,7 @@ input[type="number"] {
   }
 
   .productos-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.6rem;
   }
   .producto-imagen {
