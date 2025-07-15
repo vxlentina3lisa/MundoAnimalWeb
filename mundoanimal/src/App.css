@@ -158,6 +158,8 @@ form button:hover {
   padding: 2rem;
   text-align: center;
   background-color: #f8f8f8;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 h2 {
@@ -511,7 +513,7 @@ input[type="number"] {
   .search-bar {
     flex-basis: 100%;
     order: 3;
-    max-width: 400px;
+    max-width: 200px;
   }
   .iconos {
     gap: 10px;
@@ -527,7 +529,7 @@ input[type="number"] {
   }
 
   .productos-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     padding: 1rem;
   }
