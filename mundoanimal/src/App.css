@@ -236,8 +236,8 @@ h2 {
   justify-content: center;
   padding: 40px 16px;
   background-color: #f5f5f5;
-  width: 100%; /* Asegura que ocupe todo el ancho disponible */
-  box-sizing: border-box; /* Incluye padding en el ancho */
+  width: 100%; 
+  box-sizing: border-box; 
 }
 
 .tarjeta-producto {
@@ -490,11 +490,8 @@ input[type="number"] {
   transform: translateY(-1px);
 }
 
-/* --- Media Queries para Responsividad --- */
 
-/* Para pantallas medianas y pequeñas (tabletas, móviles grandes) */
 @media (max-width: 768px) {
-  /* Header */
   .top-bar {
     flex-direction: column;
     align-items: center;
@@ -533,10 +530,8 @@ input[type="number"] {
     font-size: 0.9rem;
   }
 
-  /* Productos Grid: 2 o 3 columnas */
   .productos-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Ajustado para 2-3 columnas */
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
     padding: 1rem;
   }
   .card-producto {
@@ -552,7 +547,6 @@ input[type="number"] {
     font-size: 0.95rem;
   }
 
-  /* Tarjeta de Producto Individual (Unidad.jsx) */
   .contenedor-principal {
     padding: 20px 10px;
   }
@@ -576,7 +570,6 @@ input[type="number"] {
     justify-content: center;
   }
 
-  /* Carrito de Compras */
   .carrito-item {
     flex-direction: column;
     align-items: flex-start;
@@ -604,9 +597,6 @@ input[type="number"] {
   }
 }
 
-/* Para celulares pequeños (ancho máximo 480px) */
-@media (max-width: 480px) {
-  /* Global */
   body {
     font-size: 14px;
   }
@@ -616,8 +606,6 @@ input[type="number"] {
   .seccion {
     padding: 1rem;
   }
-
-  /* Header */
   .logo {
     height: 60px;
   }
@@ -640,10 +628,8 @@ input[type="number"] {
     font-size: 11px;
     padding: 5px 8px;
   }
-
-  /* Productos Grid: 2 columnas */
   .productos-grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* 2 columnas en la mayoría de los móviles */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
     gap: 0.8rem;
   }
   .producto-imagen {
@@ -659,8 +645,6 @@ input[type="number"] {
     padding: 0.5rem 0.8rem;
     font-size: 0.8rem;
   }
-
-  /* Tarjeta de Producto Individual (Unidad.jsx) */
   .tarjeta-producto {
     padding: 10px;
     gap: 10px;
@@ -680,8 +664,6 @@ input[type="number"] {
     padding: 4px;
     font-size: 0.85rem;
   }
-
-  /* Carrito de Compras */
   .carrito-titulo {
     font-size: 1.6rem;
   }
