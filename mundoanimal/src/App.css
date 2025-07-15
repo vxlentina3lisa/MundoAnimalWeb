@@ -306,7 +306,7 @@ input[type="number"] {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .cliente-info {
@@ -530,7 +530,7 @@ input[type="number"] {
   }
 
   .productos-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5);
     gap: 1rem;
     padding: 1rem;
   }
